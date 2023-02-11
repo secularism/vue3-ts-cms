@@ -1,0 +1,15 @@
+# 该文件是用于配置不同编辑器、不同操作系统的
+
+root = true # 该文件配置是在根目录
+
+[*] # 表示所有文件使用
+charset = utf-8 # 设置文件字符集卫utf-8
+indent_style = space # 缩进风格（tab | space）
+indent_size = 2 # 缩进大小
+end_of_line = lf # 控制换行类型（lf | cr | crlf）
+trim_trailing_whitespace = true # 去除行首的任意空白字符
+insert_final_newline = true # 始终在文件末尾插入一个新行
+
+[*.md] # 表示仅 md 文件适用以下规则
+max_line_length = off
+trim_trailing_whitespace = false
