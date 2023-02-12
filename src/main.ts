@@ -4,36 +4,15 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
-import 'element-plus/theme-chalk/index.css'
+import { registerApp } from './global'
 
-import {
-  ElButton,
-  ElTable,
-  ElAlert,
-  ElAside,
-  ElAutocomplete,
-  ElAvatar,
-  ElBacktop,
-  ElBadge
-} from 'element-plus/lib/index'
+import './service/axios_demo'
 
 const app = createApp(App)
 
-const components = [
-  ElButton,
-  ElTable,
-  ElAlert,
-  ElAside,
-  ElAutocomplete,
-  ElAvatar,
-  ElBacktop,
-  ElBadge
-]
-
-// 全局注册一次
-for (const cpn of components) {
-  app.component(cpn.name, cpn)
-}
-
-app.use(router).use(store)
+// 注册element-plus组件
+app.use(registerApp)
+app.use(router)
+app.use(store)
+// 挂载
 app.mount('#app')
