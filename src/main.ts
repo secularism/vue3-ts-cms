@@ -13,6 +13,7 @@ const app = createApp(App)
 sxRequest.request({
   url: '/home/multidata',
   method: 'GET',
+  showLoading: false,
   interceptors: {
     requestInterceptor: (config) => {
       console.log('单独请求拦截')

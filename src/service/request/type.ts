@@ -10,4 +10,5 @@ export interface ISXRequestInterceptors {
 // 使用extends继承AxiosRequestConfig，这是为了扩展AxiosRequestConfig，加上拦截的选项
 export interface ISXRequestConfig extends AxiosRequestConfig {
   interceptors?: ISXRequestInterceptors
+  showLoading?: boolean
 }

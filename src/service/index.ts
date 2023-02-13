@@ -6,19 +6,15 @@ const sxRequest = new SXRequest({
   timeout: BASE_TIMEOUT,
   interceptors: {
     requestInterceptor: (config) => {
-      console.log('请求成功拦截')
       return config
     },
     requestInterceptorCatch(err) {
-      console.log('请求成功拦截')
       return err
     },
     responseInterceptor(res) {
-      console.log('请求成功拦截')
       return res
     },
     responseInterceptorCatch: (err) => {
-      console.log('请求成功拦截')
       return err
     }
   }
