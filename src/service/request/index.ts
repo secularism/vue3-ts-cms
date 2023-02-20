@@ -4,7 +4,7 @@ import type { AxiosInstance } from 'axios'
 import { ISXRequestConfig, ISXRequestInterceptors } from './type'
 
 import { ElLoading } from 'element-plus/lib'
-
+import { LoadingInstance } from 'element-plus/lib/components/loading/src/loading'
 // 设置默认需要Loading加载
 const DEFAULT_LOADING = true
 
@@ -19,7 +19,7 @@ class SXRequest {
    */
   instance: AxiosInstance
   interceptors?: ISXRequestInterceptors
-  loading?: any
+  loading?: LoadingInstance
   showLoading: boolean
 
   // 使用构造器使得每次创建的类都有一个axios实例，便于不用的请求配置
@@ -64,7 +64,12 @@ class SXRequest {
           this.loading?.close()
         }, 1000)
 
-        return res.data
+        const data = res.data
+        if (data.returnCode === '-1001') {
+          console.log('请求失败~, 错误信息')
+        } else {
+          return data
+        }
       },
       (err) => {
         return err
@@ -73,30 +78,52 @@ class SXRequest {
   }
 
   //封装请求函数
-  request(config: ISXRequestConfig): void {
-    if (config.interceptors?.requestInterceptor) {
-      config = config.interceptors?.requestInterceptor(config)
-    }
-    // 如果每个实例下面的request请求方法不需要loading方法，则在此关闭它，其他方法类似
-    if (config.showLoading === false) {
-      this.showLoading = config.showLoading
-    }
+  request<T>(config: ISXRequestConfig<T>): Promise<T> {
+    return new Promise((resolve, reject) => {
+      // 1.单个请求的拦截
+      if (config.interceptors?.requestInterceptor) {
+        config = config.interceptors?.requestInterceptor(config)
+      }
+      // 2.如果每个实例下面的request请求方法不需要loading方法，则在此关闭它，其他方法类似
+      if (config.showLoading === false) {
+        this.showLoading = config.showLoading
+      }
 
-    this.instance
-      .request(config)
-      .then((res) => {
-        if (config.interceptors?.responseInterceptor) {
-          res = config.interceptors.responseInterceptor(res)
-        }
-        // 因为上面将showLoading关闭了，这样如果request请求没有重新设置，那么所有的showLoading都会被关闭，因此这里需要将showLoading重新设置为默认值
-        this.showLoading = DEFAULT_LOADING
-        console.log(res)
-      })
-      .catch((err) => {
-        // 同上
-        this.showLoading = DEFAULT_LOADING
-        console.log(err)
-      })
+      this.instance
+        .request<any, T>(config)
+        .then((res) => {
+          if (config.interceptors?.responseInterceptor) {
+            res = config.interceptors.responseInterceptor(res)
+          }
+          // 因为上面将showLoading关闭了，这样如果request请求没有重新设置，那么所有的showLoading都会被关闭，因此这里需要将showLoading重新设置为默认值
+          this.showLoading = DEFAULT_LOADING
+          // 3.返回这个res
+          resolve(res)
+        })
+        .catch((err) => {
+          // 同上
+          this.showLoading = DEFAULT_LOADING
+          console.log(err)
+          // 3.返回err
+          reject(err)
+        })
+    })
+  }
+
+  get<T>(config: ISXRequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'GET' })
+  }
+
+  post<T>(config: ISXRequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'POST' })
+  }
+
+  delete<T>(config: ISXRequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'DELETE' })
+  }
+
+  patch<T>(config: ISXRequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'PATCH' })
   }
 }
 
