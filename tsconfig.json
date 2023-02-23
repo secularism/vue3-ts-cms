@@ -1,29 +1,45 @@
 {
+  // tsconfig.json可以查询typescriptlang.org/tsconfig
   "compilerOptions": {
+    // 目标代码(ts -> js(es5/6/7))
     "target": "esnext",
+    // 目标代码需要使用的模块化方案(commonjs require/module.exports/es module import/export)
     "module": "esnext",
+    // 严格检查模式
     "strict": true,
+    // 对jsx进行怎么样的处理
     "jsx": "preserve",
+    // 按照node的方式去解析模块 import "/index.node"
     "moduleResolution": "node",
+    // 跳过一些库的类型检测 (有些类型没有用过，就不要检测)
     "skipLibCheck": true,
+    // 下面两个一起 意思为es module和commonjs可不可以一起使用
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "useDefineForClassFields": true,
+    // 要不要生成映射文件
     "sourceMap": true,
+    // 文件路径在解析时，基本的url
     "baseUrl": ".",
+    // 指定具体要解析的类型，可以不传，不传的时候按target来解析
     "types": ["webpack-env"],
+    // 路径解析（编译阶段类似于webpack的别名alias）
     "paths": {
       "@/*": ["src/*"]
     },
+    // 指定在项目中可以使用哪些库的类型
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
+  // 表示当前哪些文件需要ts解析
   "include": [
+    // 解析src下所有的ts文件
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx"
   ],
+  // 排除哪些文件
   "exclude": ["node_modules"]
 }

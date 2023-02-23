@@ -59,10 +59,8 @@ class SXRequest {
     )
     this.instance.interceptors.response.use(
       (res) => {
-        setTimeout(() => {
-          // 这里可以通过调用上面的loading参数关闭动画
-          this.loading?.close()
-        }, 1000)
+        // 这里可以通过调用上面的loading参数关闭动画
+        this.loading?.close()
 
         const data = res.data
         if (data.returnCode === '-1001') {
