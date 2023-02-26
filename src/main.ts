@@ -6,6 +6,7 @@ import store from './store'
 
 import 'normalize.css'
 import './assets/css/index.less'
+import 'element-plus/es/components/icon/style/css'
 
 import { registerApp } from './global'
 

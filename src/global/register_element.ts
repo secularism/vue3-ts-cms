@@ -6,27 +6,33 @@ import 'element-plus/theme-chalk/base.css'
 import {
   ElButton,
   ElTable,
-  ElAlert,
-  ElAside,
-  ElAutocomplete,
-  ElAvatar,
   ElBacktop,
-  ElBadge,
   ElCarousel,
-  ElCarouselItem
+  ElCarouselItem,
+  ElTabs,
+  ElTabPane,
+  ElIcon,
+  ElForm,
+  ElFormItem,
+  ElInput,
+  ElCheckbox,
+  ElLink
 } from 'element-plus/lib'
 
 const components = [
   ElButton,
   ElTable,
-  ElAlert,
-  ElAside,
-  ElAutocomplete,
-  ElAvatar,
   ElBacktop,
-  ElBadge,
   ElCarousel,
-  ElCarouselItem
+  ElCarouselItem,
+  ElTabs,
+  ElTabPane,
+  ElIcon,
+  ElForm,
+  ElFormItem,
+  ElInput,
+  ElCheckbox,
+  ElLink
 ]
 
 export function globalRegister(app: App) {
