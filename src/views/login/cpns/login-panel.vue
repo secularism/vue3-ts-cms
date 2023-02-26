@@ -57,7 +57,7 @@ export default defineComponent({
     const handleLogin = () => {
       // 因为accountRef并不一定会有，因此需要用到可选链
       // accountRef是子组件对象，其value值可以拿到组件，LoginAction()是子组件的方法，通过父组件去调用子组件的方法
-      accountRef.value?.LoginAction()
+      accountRef.value?.LoginAction(IsRememberPassword.value)
     }
     return { IsRememberPassword, handleLogin, accountRef }
   }
