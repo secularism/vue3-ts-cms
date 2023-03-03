@@ -5,7 +5,8 @@ const store = createStore({
     return {
       name: 'zsx'
     }
-  }
+  },
+  modules: {}
 })
 
 export default store
