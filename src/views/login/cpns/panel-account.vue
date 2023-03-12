@@ -16,9 +16,13 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
+import { useStore } from 'vuex'
+
 import { rules } from '../config/account-config'
 import { ElForm } from 'element-plus'
+
 import localStorage from '@/utils/cache'
+
 export default defineComponent({
   setup() {
     const account = reactive({
@@ -28,6 +32,7 @@ export default defineComponent({
     })
     // 定义变量存储表单组件
     const FormRef = ref<InstanceType<typeof ElForm>>()
+    const store = useStore()
     // 子组件的方法, 需要传入一个参数IsRememberPassword是否记住密码
     const LoginAction = (IsRememberPassword: boolean) => {
       // 通过表单组件可以知道校验是否成功
@@ -43,6 +48,9 @@ export default defineComponent({
             localStorage.deleteCache('password')
           }
         }
+
+        // 2.开始登录验证
+        store.dispatch('loginModule/accountLoginAction', { ...account })
       })
     }
     return { account, rules, LoginAction, FormRef }

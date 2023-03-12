@@ -1,8 +1,8 @@
 <template>
   <div class="loginPanel">
     <h1>后台管理系统</h1>
-    <el-tabs type="border-card" class="demo-tabs" stretch>
-      <el-tab-pane>
+    <el-tabs type="border-card" class="demo-tabs" stretch v-model="panelTabRef">
+      <el-tab-pane name="account">
         <template #label>
           <span class="custom-tabs-label">
             <el-icon><user-filled /></el-icon>
@@ -12,14 +12,14 @@
         <!-- 使用ref绑定这个组件对象，可以通过accountRef拿到该组件的方法、数据等 -->
         <panel-account ref="accountRef" />
       </el-tab-pane>
-      <el-tab-pane>
+      <el-tab-pane name="phone">
         <template #label>
           <span class="custom-tabs-label">
             <el-icon><iphone /></el-icon>
             <span>手机登录</span>
           </span>
         </template>
-        <panel-phone />
+        <panel-phone ref="phoneRef" />
       </el-tab-pane>
     </el-tabs>
 
@@ -36,6 +36,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
+
 import { UserFilled, Iphone } from '@element-plus/icons-vue'
 import PanelAccount from './panel-account.vue'
 import PanelPhone from './panel-phone.vue'
@@ -52,14 +53,29 @@ export default defineComponent({
     const IsRememberPassword = ref(true)
     // 创建一个变量来保存组件，其类型因为是一个对象，所以要用下面这样的写法
     const accountRef = ref<InstanceType<typeof PanelAccount>>()
+    const phoneRef = ref<InstanceType<typeof PanelPhone>>()
+    // 创建变量用于保存切换tab的值
+    const panelTabRef = ref<string>('account')
+
     // 这里的是父组件的方法，点击登录会调用此方法，但是登录的逻辑不应该在这里写，因为还有手机登录，登录的逻辑应该要放到子组件里面去编写
     // 这里只是为了告诉子组件，已经触发登录这个方法，实际操作和具体逻辑应有子组件去实现
     const handleLogin = () => {
+      if (panelTabRef.value == 'account') {
+        accountRef.value?.LoginAction(IsRememberPassword.value)
+      } else {
+        // phoneRef.value?.LoginAction(IsRememberPassword.value)
+        console.log(123)
+      }
       // 因为accountRef并不一定会有，因此需要用到可选链
       // accountRef是子组件对象，其value值可以拿到组件，LoginAction()是子组件的方法，通过父组件去调用子组件的方法
-      accountRef.value?.LoginAction(IsRememberPassword.value)
     }
-    return { IsRememberPassword, handleLogin, accountRef }
+    return {
+      IsRememberPassword,
+      panelTabRef,
+      accountRef,
+      phoneRef,
+      handleLogin
+    }
   }
 })
 </script>
