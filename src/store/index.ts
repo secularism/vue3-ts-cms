@@ -13,5 +13,10 @@ const store = createStore<IRootState>({
   },
   modules: { loginModule }
 })
+// 导出该方法
+export function setupLogin() {
+  // 使用actions中的方法 用到dispatch
+  store.dispatch('loginModule/loadLocalLogin')
+}
 
 export default store

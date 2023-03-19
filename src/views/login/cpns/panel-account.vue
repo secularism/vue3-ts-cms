@@ -7,8 +7,8 @@
         <el-input v-model="account.name" />
       </el-form-item>
 
-      <el-form-item label="密码" prop="pwd">
-        <el-input v-model="account.pwd" show-password />
+      <el-form-item label="密码" prop="password">
+        <el-input v-model="account.password" show-password />
       </el-form-item>
     </el-form>
   </div>
@@ -28,7 +28,7 @@ export default defineComponent({
     const account = reactive({
       // 判断本地存储是否有值，没有的话默认为''
       name: localStorage.getCache('name') ?? '',
-      pwd: localStorage.getCache('password') ?? ''
+      password: localStorage.getCache('password') ?? ''
     })
     // 定义变量存储表单组件
     const FormRef = ref<InstanceType<typeof ElForm>>()
@@ -42,14 +42,14 @@ export default defineComponent({
           // 1.判断是否需要保存密码
           if (IsRememberPassword) {
             localStorage.setCache('name', account.name)
-            localStorage.setCache('password', account.pwd)
+            localStorage.setCache('password', account.password)
           } else {
             localStorage.deleteCache('name')
             localStorage.deleteCache('password')
           }
         }
 
-        // 2.开始登录验证
+        // 2.开始登录
         store.dispatch('loginModule/accountLoginAction', { ...account })
       })
     }

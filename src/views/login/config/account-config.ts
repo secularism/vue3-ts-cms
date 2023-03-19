@@ -11,7 +11,7 @@ export const rules = {
       trigger: 'blur'
     }
   ],
-  pwd: [
+  password: [
     {
       required: true,
       message: '请输入密码',
