@@ -16,7 +16,14 @@ import {
   ElFormItem,
   ElInput,
   ElCheckbox,
-  ElLink
+  ElLink,
+  ElContainer,
+  ElAside,
+  ElHeader,
+  ElMain,
+  ElMenu,
+  ElSubMenu,
+  ElMenuItem
 } from 'element-plus/lib'
 
 const components = [
@@ -32,12 +39,24 @@ const components = [
   ElFormItem,
   ElInput,
   ElCheckbox,
-  ElLink
+  ElLink,
+  ElContainer,
+  ElAside,
+  ElHeader,
+  ElMain,
+  ElMenu,
+  ElSubMenu,
+  ElMenuItem
 ]
+// 全局注册icon组件
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 export function globalRegister(app: App) {
   // 全局注册一次
   for (const cpn of components) {
     app.component(cpn.name, cpn)
+  }
+  for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    app.component(key, component)
   }
 }

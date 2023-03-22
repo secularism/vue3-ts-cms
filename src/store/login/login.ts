@@ -1,7 +1,7 @@
 import { Module } from 'vuex'
 import router from '@/router'
 // 导入类型
-import { ILoginState } from './types'
+import { ILoginState, userMenus } from './types'
 import { IRootState } from '../types'
 // 导入网络请求方法
 import {
@@ -77,7 +77,7 @@ const loginModule: Module<ILoginState, IRootState> = {
     changeUserInfo(state, userInfo: any) {
       state.userInfo = userInfo
     },
-    changeUserMenus(state, userMenus: any) {
+    changeUserMenus(state, userMenus: userMenus) {
       state.userMenus = userMenus
     }
   }
