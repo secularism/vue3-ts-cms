@@ -15,7 +15,7 @@
       class="el-menu-vertical"
     >
       <template v-for="(itemMenu, ix) in userMenus" :key="itemMenu.id">
-        <template v-if="itemMenu.children !== null">
+        <template v-if="itemMenu.type === 1">
           <!-- 第一级menu -->
           <el-sub-menu :index="itemMenu.id + ''">
             <template #title>
@@ -26,25 +26,12 @@
             </template>
 
             <template v-for="item in itemMenu.children" :key="item.id">
-              <template
-                v-if="item.children !== null && item.children !== undefined"
-              >
-                <!-- 第二级（如果第二级还有children ，那么使用sub-menu） -->
-                <el-sub-menu :index="item.id + ''">
-                  <template #title>
-                    <span>{{ item.name }}</span>
-                  </template>
-                  <template v-for="subitem in item.children" :key="subitem.id">
-                    <!-- 第三级 -->
-                    <el-menu-item :index="subitem?.id + ''">
-                      <span>{{ subitem?.name }}</span>
-                    </el-menu-item>
-                  </template>
-                </el-sub-menu>
-              </template>
-              <!-- 否则使用menu-item -->
-              <template v-else>
-                <el-menu-item :index="item.id + ''">
+              <template v-if="item.type === 2">
+                <!-- 第二级 -->
+                <el-menu-item
+                  :index="item.id + ''"
+                  @click="handleTurnRouter(item)"
+                >
                   <span>{{ item.name }}</span>
                 </el-menu-item>
               </template>
@@ -74,6 +61,9 @@ export default defineComponent({
     const userMenus = computed<userMenus>(
       () => store.state.loginModule.userMenus
     )
+    const handleTurnRouter = (item: any) => {
+      console.log(item)
+    }
     // 定义icon的名字（因为element-plus版本的变更，不能使用i标签来展示icon，且icon的名字均有了改变）
     const iconName = ref()
     // 定义正则表达式
@@ -85,7 +75,7 @@ export default defineComponent({
       })
     })
 
-    return { userMenus, iconName }
+    return { userMenus, iconName, handleTurnRouter }
   }
 })
 </script>

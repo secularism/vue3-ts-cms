@@ -25,7 +25,7 @@ import NavHeader from '@/components/nav-header'
 export default defineComponent({
   components: { NavMenu, NavHeader },
   setup() {
-    const isCollapse = ref(false)
+    const isCollapse = ref(true)
     // 2.实现所注册的方法，并修改值
     const handleFoldChange = (isFold: boolean) => {
       isCollapse.value = isFold
