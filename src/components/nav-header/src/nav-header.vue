@@ -4,6 +4,7 @@
       <!-- 动态切换图标 -->
       <component :is="isFold ? 'Expand' : 'Fold'"></component>
     </el-icon>
+    <span>123</span>
   </div>
 </template>
 
