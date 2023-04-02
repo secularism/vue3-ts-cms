@@ -23,7 +23,12 @@ import {
   ElMain,
   ElMenu,
   ElSubMenu,
-  ElMenuItem
+  ElMenuItem,
+  ElDatePicker,
+  ElSelect,
+  ElOption,
+  ElRow,
+  ElCol
 } from 'element-plus/lib'
 
 const components = [
@@ -46,7 +51,12 @@ const components = [
   ElMain,
   ElMenu,
   ElSubMenu,
-  ElMenuItem
+  ElMenuItem,
+  ElDatePicker,
+  ElSelect,
+  ElOption,
+  ElRow,
+  ElCol
 ]
 // 全局注册icon组件
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
