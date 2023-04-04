@@ -24,14 +24,11 @@
 import { defineComponent, ref } from 'vue'
 import NavMenu from '@/components/nav-menu'
 import NavHeader from '@/components/nav-header'
-import { useRouter } from 'vue-router'
 export default defineComponent({
   components: { NavMenu, NavHeader },
   setup() {
     const isCollapse = ref(true)
     // 2.实现所注册的方法，并修改值
-    const router = useRouter()
-    console.log(router)
     const handleFoldChange = (isFold: boolean) => {
       isCollapse.value = isFold
     }

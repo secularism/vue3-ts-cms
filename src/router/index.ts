@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 // 加type表示导入的是类型
 import type { RouteRecordRaw } from 'vue-router'
 import LocalCache from '@/utils/cache'
+import { firstMenu } from '@/utils/map-menu'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -36,6 +37,10 @@ router.beforeEach((to) => {
     if (!token) {
       return '/login'
     }
+  }
+  // 如果访问了/main , 则重定向
+  if (to.path === '/main') {
+    return firstMenu.url
   }
 })
 

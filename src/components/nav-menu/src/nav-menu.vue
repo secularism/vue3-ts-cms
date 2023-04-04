@@ -7,7 +7,7 @@
     </div>
     <!-- menu -->
     <el-menu
-      default-active="2"
+      :default-active="defaultActive"
       background-color="#0c2135"
       text-color="#b7bdc3"
       :collapse="!collapse"
@@ -47,7 +47,8 @@
 import { defineComponent, computed, ref } from 'vue'
 import { userMenus } from '@/store/login/types'
 import { useStore } from '@/store/index'
-import router from '@/router'
+import { useRouter, useRoute } from 'vue-router'
+import { pathToMenu } from '@/utils/map-menu'
 export default defineComponent({
   props: {
     collapse: {
@@ -58,6 +59,8 @@ export default defineComponent({
   components: {},
   setup() {
     const store = useStore()
+    const router = useRouter()
+    const route = useRoute()
     // 计算属性中传入泛型，可以使得到的userMenus为userMenus类型
     const userMenus = computed<userMenus>(
       () => store.state.loginModule.userMenus
@@ -77,8 +80,13 @@ export default defineComponent({
         return $1.toUpperCase()
       })
     })
+    const currentPath = route.path
+    const findMenu = pathToMenu(store.state.loginModule.userMenus, currentPath)
+    // console.log(store.state.loginModule.userMenus)
+    // console.log(menu)
+    const defaultActive = ref(findMenu.id + '')
 
-    return { userMenus, iconName, handleTurnRouter }
+    return { userMenus, iconName, handleTurnRouter, defaultActive }
   }
 })
 </script>
