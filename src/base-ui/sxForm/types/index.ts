@@ -1,6 +1,8 @@
 type IFormType = 'input' | 'select' | 'password' | 'datepicker'
 
 export interface IFormItem {
+  // 添加一个属性，以便渲染的时候能够通过该属性使用v-model来绑定值
+  filed: string
   // 表单的类型，是输入框还是选择框
   type: IFormType
   // 表单的label

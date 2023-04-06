@@ -1,5 +1,6 @@
 import { userMenus, menuItems } from '@/store/login/types'
 import { RouteRecordRaw } from 'vue-router'
+import { IBreadCrumb } from '@/base-ui/SxBreadCrumb/types'
 
 // 定义了一个firstMenu来保存menu中的第一个变量，为了访问/main时重定向到默认子路由上
 let firstMenu: menuItems
@@ -35,10 +36,21 @@ export function mapMenusToRoutes(userMenus: userMenus) {
   return routes
 }
 
+// 通过路径获取当前面包屑的数据
+export function pathToBreadCrumb(
+  userMenus: userMenus,
+  currentPath: string
+): IBreadCrumb[] {
+  const breadCrumbs: IBreadCrumb[] = []
+  pathToMenu(userMenus, currentPath, breadCrumbs)
+  return breadCrumbs
+}
+
 // 该函数是将传入的路径转换为相应的menu对象，为了能获取到menu的id 以动态绑定其id
 export function pathToMenu(
   userMenus: userMenus,
-  currentPath: string
+  currentPath: string,
+  breadCrumb?: IBreadCrumb[]
 ): menuItems {
   // 定义一个变量来存储找到的menu
   let findMenu: menuItems = {} as menuItems
@@ -50,7 +62,14 @@ export function pathToMenu(
         currentPath
       )
       // 如果findMenu存在 并且不是一个空对象，则已经找到 return
-      if (findMenu && JSON.stringify(findMenu) !== '{}') {
+      if (
+        findMenu &&
+        JSON.stringify(findMenu) !== '{}' &&
+        breadCrumb !== undefined
+      ) {
+        // 如果找到二级菜单，将一级菜单和二级菜单同时添加到breadCrumb中，路径可选择不添加
+        breadCrumb?.push({ name: menu.name })
+        breadCrumb?.push({ name: findMenu.name })
         return findMenu as unknown as menuItems
       }
     }

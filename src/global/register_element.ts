@@ -28,7 +28,9 @@ import {
   ElSelect,
   ElOption,
   ElRow,
-  ElCol
+  ElCol,
+  ElBreadcrumb,
+  ElBreadcrumbItem
 } from 'element-plus/lib'
 
 const components = [
@@ -56,7 +58,9 @@ const components = [
   ElSelect,
   ElOption,
   ElRow,
-  ElCol
+  ElCol,
+  ElBreadcrumb,
+  ElBreadcrumbItem
 ]
 // 全局注册icon组件
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
