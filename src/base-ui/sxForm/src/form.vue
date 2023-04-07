@@ -1,5 +1,8 @@
 <template>
   <div class="sx-form">
+    <header class="header">
+      <slot name="header">高级搜索</slot>
+    </header>
     <el-form :label-width="labelWidth">
       <el-row>
         <template v-for="item in formItems" :key="item.label">
@@ -50,6 +53,11 @@
         </template>
       </el-row>
     </el-form>
+    <footer class="footer">
+      <slot name="footer">
+        <el-button>按钮</el-button>
+      </slot>
+    </footer>
   </div>
 </template>
 

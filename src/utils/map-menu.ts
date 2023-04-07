@@ -53,6 +53,7 @@ export function pathToMenu(
   breadCrumb?: IBreadCrumb[]
 ): menuItems {
   // 定义一个变量来存储找到的menu
+  // debugger
   let findMenu: menuItems = {} as menuItems
   for (const menu of userMenus) {
     // 如果type为1 则是一级菜单，递归调用函数
@@ -62,11 +63,7 @@ export function pathToMenu(
         currentPath
       )
       // 如果findMenu存在 并且不是一个空对象，则已经找到 return
-      if (
-        findMenu &&
-        JSON.stringify(findMenu) !== '{}' &&
-        breadCrumb !== undefined
-      ) {
+      if (findMenu && JSON.stringify(findMenu) !== '{}') {
         // 如果找到二级菜单，将一级菜单和二级菜单同时添加到breadCrumb中，路径可选择不添加
         breadCrumb?.push({ name: menu.name })
         breadCrumb?.push({ name: findMenu.name })
