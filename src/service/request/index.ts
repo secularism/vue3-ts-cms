@@ -77,7 +77,7 @@ class SXRequest {
   }
 
   //封装请求函数
-  request<T>(config: ISXRequestConfig<T>): Promise<T> {
+  request<T = any>(config: ISXRequestConfig<T>): Promise<T> {
     return new Promise((resolve, reject) => {
       // 1.单个请求的拦截
       if (config.interceptors?.requestInterceptor) {
@@ -109,19 +109,19 @@ class SXRequest {
     })
   }
 
-  get<T>(config: ISXRequestConfig<T>): Promise<T> {
+  get<T = any>(config: ISXRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'GET' })
   }
 
-  post<T>(config: ISXRequestConfig<T>): Promise<T> {
+  post<T = any>(config: ISXRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'POST' })
   }
 
-  delete<T>(config: ISXRequestConfig<T>): Promise<T> {
+  delete<T = any>(config: ISXRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'DELETE' })
   }
 
-  patch<T>(config: ISXRequestConfig<T>): Promise<T> {
+  patch<T = any>(config: ISXRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'PATCH' })
   }
 }

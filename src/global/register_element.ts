@@ -30,7 +30,8 @@ import {
   ElRow,
   ElCol,
   ElBreadcrumb,
-  ElBreadcrumbItem
+  ElBreadcrumbItem,
+  ElTableColumn
 } from 'element-plus/lib'
 
 const components = [
@@ -60,7 +61,8 @@ const components = [
   ElRow,
   ElCol,
   ElBreadcrumb,
-  ElBreadcrumbItem
+  ElBreadcrumbItem,
+  ElTableColumn
 ]
 // 全局注册icon组件
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'

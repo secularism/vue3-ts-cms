@@ -1,6 +1,7 @@
 import { createStore, Store, useStore as useVuexStore } from 'vuex'
 import { IRootState, IStoreType } from './types'
 import loginModule from './login/login'
+import systemModule from './main/system/system'
 
 // createStore 的类型是规定了state中的类型
 const store = createStore<IRootState>({
@@ -11,7 +12,7 @@ const store = createStore<IRootState>({
       height: 213
     }
   },
-  modules: { loginModule }
+  modules: { loginModule, systemModule }
 })
 // 导出该方法
 export function setupLogin() {

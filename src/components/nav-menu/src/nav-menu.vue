@@ -82,7 +82,6 @@ export default defineComponent({
     })
     const currentPath = route.path
     const findMenu = pathToMenu(userMenus.value, currentPath)
-    console.log(findMenu)
     const defaultActive = ref(findMenu.id + '')
     return { userMenus, iconName, handleTurnRouter, defaultActive }
   }
