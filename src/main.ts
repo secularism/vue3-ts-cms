@@ -19,6 +19,7 @@ const app = createApp(App)
 setupLogin()
 // 注册element-plus组件
 app.use(registerApp)
+
 app.use(router)
 app.use(store)
 // 挂载

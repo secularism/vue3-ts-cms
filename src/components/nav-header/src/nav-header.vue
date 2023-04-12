@@ -5,8 +5,9 @@
       <component :is="isFold ? 'Expand' : 'Fold'"></component>
     </el-icon>
     <!-- 面包屑 -->
-    <div class="nav-breadcrumb">
+    <div class="content">
       <sx-bread-crumb :breadCrumbs="breadCrumbs" />
+      <user-info />
     </div>
   </div>
 </template>
@@ -14,6 +15,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue'
 import SxBreadCrumb, { IBreadCrumb } from '@/base-ui/SxBreadCrumb'
+import userInfo from './user-info.vue'
 import { pathToBreadCrumb } from '@/utils/map-menu'
 import { useStore } from '@/store'
 import { useRoute } from 'vue-router'
@@ -21,7 +23,7 @@ import { useRoute } from 'vue-router'
 export default defineComponent({
   // 使用emit发送事件到父组件
   emits: ['foldChange'],
-  components: { SxBreadCrumb },
+  components: { SxBreadCrumb, userInfo },
   setup(props, { emit }) {
     const isFold = ref(true)
     const handleFoldClick = () => {
@@ -45,14 +47,18 @@ export default defineComponent({
 <style scoped lang="less">
 .nav-header {
   display: flex;
-  align-items: center;
+  width: 100%;
+
   .fold-menu {
     font-size: 30px;
     cursor: pointer;
   }
-  .nav-breadcrumb {
-    justify-content: center;
-    padding-left: 10px;
+  .content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
+    padding: 0 20px;
   }
 }
 </style>
