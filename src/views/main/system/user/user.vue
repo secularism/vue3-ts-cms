@@ -4,7 +4,10 @@
     <page-search :searchFormConfig="searchFormConfig" />
 
     <!-- table 数据展示 -->
-    <page-content :contentTableConfig="contentTableConfig"></page-content>
+    <page-content
+      :contentTableConfig="contentTableConfig"
+      PageName="users"
+    ></page-content>
   </div>
 </template>
 

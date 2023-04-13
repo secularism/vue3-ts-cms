@@ -42,21 +42,35 @@ export default defineComponent({
     contentTableConfig: {
       type: Object,
       required: true
+    },
+    PageName: {
+      type: String,
+      required: true
+    },
+    offset: {
+      type: Number,
+      default: 0
+    },
+    size: {
+      type: Number,
+      default: 10
     }
   },
-  setup() {
+  setup(props) {
     // 将数据的获取放在这个组件中，目的是为了分层的操作能更灵活
     // 获取数据
     const store = useStore()
     store.dispatch('systemModule/getPageListAction', {
-      pageUrl: '/users/list',
+      pageName: props.PageName,
       queryInfo: {
-        offset: 0,
-        size: 10
+        offset: props.offset,
+        size: props.size
       }
     })
     // 定义table数据
-    const tableData = computed(() => store.state.systemModule.userList)
+    const tableData = computed(() =>
+      store.getters['systemModule/pageListData'](props.PageName)
+    )
     return { tableData }
   }
 })

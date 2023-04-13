@@ -34,14 +34,19 @@ export default defineComponent({
   components: {
     sxForm
   },
-  setup() {
-    const formData: any = ref({
-      id: '',
-      name: '',
-      password: '',
-      sport: '',
-      createTime: ''
+  setup(props) {
+    // 动态双向绑定
+    const formOriginData: any = {}
+    // 获取配置文件中的filed属性
+    const formItems = props.searchFormConfig.formItems.map((item: any) => {
+      return item.filed
     })
+    // 遍历filed属性动态的生成formOriginData
+    formItems.forEach((item: any) => {
+      formOriginData[item] = ''
+    })
+    console.log(formOriginData)
+    const formData: any = ref(formOriginData)
     return { formData }
   }
 })
