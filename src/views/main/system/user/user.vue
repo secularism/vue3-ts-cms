@@ -1,18 +1,23 @@
 <template>
   <div class="user">
     <!-- 搜索 -->
-    <page-search :searchFormConfig="searchFormConfig" />
+    <page-search
+      :searchFormConfig="searchFormConfig"
+      @handleQueryClick="handleQueryClick"
+      @handleResetClick="handleResetClick"
+    />
 
     <!-- table 数据展示 -->
     <page-content
       :contentTableConfig="contentTableConfig"
       PageName="users"
+      ref="pageContentRef"
     ></page-content>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 import PageSearch from '@/components/page-search'
 import PageContent from '@/components/page-content'
@@ -27,8 +32,20 @@ export default defineComponent({
     PageContent
   },
   setup() {
-    // 展示数据所需要的字段
-    return { searchFormConfig, contentTableConfig }
+    const pageContentRef = ref<InstanceType<typeof PageContent>>()
+    const handleQueryClick = (param: any) => {
+      pageContentRef.value?.getPageData(param)
+    }
+    const handleResetClick = () => {
+      console.log(123)
+    }
+    return {
+      pageContentRef,
+      searchFormConfig,
+      contentTableConfig,
+      handleQueryClick,
+      handleResetClick
+    }
   }
 })
 </script>

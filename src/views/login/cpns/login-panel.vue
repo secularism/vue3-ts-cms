@@ -48,6 +48,7 @@ export default defineComponent({
     PanelAccount,
     PanelPhone
   },
+
   setup() {
     // 是否记住密码，默认是true
     const IsRememberPassword = ref(true)

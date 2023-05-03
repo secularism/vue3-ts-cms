@@ -60,18 +60,23 @@ export default defineComponent({
     // 将数据的获取放在这个组件中，目的是为了分层的操作能更灵活
     // 获取数据
     const store = useStore()
-    store.dispatch('systemModule/getPageListAction', {
-      pageName: props.PageName,
-      queryInfo: {
-        offset: props.offset,
-        size: props.size
-      }
-    })
+    const getPageData = (queryInfo: any = {}) => {
+      console.log(queryInfo)
+      store.dispatch('systemModule/getPageListAction', {
+        pageName: props.PageName,
+        queryInfo: {
+          offset: props.offset,
+          size: props.size,
+          ...queryInfo
+        }
+      })
+    }
+    getPageData()
     // 定义table数据
     const tableData = computed(() =>
       store.getters['systemModule/pageListData'](props.PageName)
     )
-    return { tableData }
+    return { tableData, getPageData }
   }
 })
 </script>
