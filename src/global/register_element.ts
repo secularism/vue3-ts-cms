@@ -36,7 +36,8 @@ import {
   ElDropdownItem,
   ElAvatar,
   ElDropdownMenu,
-  ElPagination
+  ElPagination,
+  ElImage
 } from 'element-plus/lib'
 
 const components = [
@@ -72,7 +73,8 @@ const components = [
   ElDropdownItem,
   ElAvatar,
   ElDropdownMenu,
-  ElPagination
+  ElPagination,
+  ElImage
 ]
 // 全局注册icon组件
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'

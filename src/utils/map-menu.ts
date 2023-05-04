@@ -1,4 +1,4 @@
-import { userMenus, menuItems } from '@/store/login/types'
+import { userMenus, menuItems, subItem } from '@/store/login/types'
 import { RouteRecordRaw } from 'vue-router'
 import { IBreadCrumb } from '@/base-ui/SxBreadCrumb/types'
 
@@ -76,6 +76,22 @@ export function pathToMenu(
     }
   }
   return findMenu
+}
+
+export function menuMapPermission(userMenus: userMenus) {
+  const permission: string[] = []
+  const _recurseGetPermission = (menus: userMenus) => {
+    for (const menu of menus) {
+      if (menu.type === 1 || menu.type === 2) {
+        _recurseGetPermission((menu.children as unknown as userMenus) ?? [])
+      } else if (menu.type === 3) {
+        permission.push((menu as unknown as subItem).permission)
+      }
+    }
+  }
+  _recurseGetPermission(userMenus)
+
+  return permission
 }
 
 export { firstMenu }

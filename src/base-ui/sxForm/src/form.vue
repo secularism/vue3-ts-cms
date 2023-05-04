@@ -133,9 +133,9 @@ export default defineComponent({
 
     // 正确做法：使用解构后复制一份赋值给formData，然后使用watch对formData进行深度监听，此时子组件修改值时，formData会被监听到，会发送事件给父组件，父组件来修改props.modelValue，因为formData对props.modelValue是响应式的，当props.modelValue改变时，formData也会改变，继而避免了单向数据流
     // 但是需要注意的是需要写成ref({ ...props.modelValue })，而不是ref(props.modelValue)，因为前者不是共用一块内存地址，改变formData时不会直接改变modelValue的值，而是通过emit发送事件，由父组件去改变modelValue的值，但是后者是共用一块内存地址，改变formData时已经改变了modelValue，所以再发送emit去改变modelValue已经是多此一举了，这样的话，在子组件就已经改掉了这个modelValue，违反了单向数据流
-    console.log(props.modelValue)
+    // console.log(props.modelValue)
     const formData = ref({ ...props.modelValue })
-    console.log(formData.value === props.modelValue)
+    // console.log(formData.value === props.modelValue)
 
     watch(
       formData,

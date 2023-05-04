@@ -11,7 +11,7 @@ import {
 } from '@/service/login/login'
 // 导入存储cache的方法
 import LocalCache from '@/utils/cache'
-import { mapMenusToRoutes } from '@/utils/map-menu'
+import { mapMenusToRoutes, menuMapPermission } from '@/utils/map-menu'
 // 定义一个vuex 的 module，module需要传入两个泛型，分别是根类型和该module 的类型
 const loginModule: Module<ILoginState, IRootState> = {
   namespaced: true,
@@ -19,7 +19,8 @@ const loginModule: Module<ILoginState, IRootState> = {
     return {
       userInfo: {},
       token: '',
-      userMenus: []
+      userMenus: [],
+      permission: []
     }
   },
   getters: {},
@@ -79,15 +80,19 @@ const loginModule: Module<ILoginState, IRootState> = {
       state.userInfo = userInfo
     },
     changeUserMenus(state, userMenus: userMenus) {
-      // 修改state中的userMenus
+      // 1.修改state中的userMenus
       state.userMenus = userMenus
 
-      // 通过userMenus 生成动态路由
+      // 2.通过userMenus 生成动态路由
       const routes = mapMenusToRoutes(userMenus)
       // 将生成的路由添加至router中
       routes.forEach((route) => {
         router.addRoute('main', route)
       })
+
+      // 3.生成所有的permission
+      const permission = menuMapPermission(userMenus)
+      state.permission = permission
     }
   }
 }

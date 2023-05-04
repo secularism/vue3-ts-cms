@@ -1,16 +1,15 @@
 <template>
   <div class="content">
-    <sx-table :tableData="tableData" v-bind="contentTableConfig">
+    <sx-table
+      :tableData="tableData"
+      v-bind="contentTableConfig"
+      :tableCount="tableCount"
+      v-model:page="pageInfo"
+    >
       <template #headerHandler>
-        <el-button type="primary">新建用户</el-button>
+        <el-button v-if="isCreate" type="primary">新建用户</el-button>
       </template>
       <!-- 对status的这个插槽使用button来展示 -->
-      <template #status="scope">
-        <!-- 使用scope.row来获取子组件每一行的数据，根据数据来动态决定需要展示什么标签 -->
-        <el-button plain :type="scope.row.enable ? 'success' : 'danger'">
-          {{ scope.row.enable ? '启用' : '禁用' }}
-        </el-button>
-      </template>
       <template #createAt="scope">
         <!-- 全局注册的$filters可以直接使用 -->
         <span>{{ $filters.formatTime(scope.row.createAt) }}</span>
@@ -20,22 +19,32 @@
         <span>{{ $filters.formatTime(scope.row.updateAt) }}</span>
       </template>
       <template #handler>
-        <el-button color="#FFBC42" size="small">
+        <el-button v-if="isUpdate" color="#FFBC42" size="small">
           <el-icon><Edit /></el-icon>
         </el-button>
-        <el-button color="#FDD692" size="small">
+        <el-button v-if="isDelete" color="#FDD692" size="small">
           <el-icon><Delete /></el-icon>
         </el-button>
+      </template>
+
+      <!-- 这里动态的渲染各个组件中所定制的插槽 -->
+      <template
+        v-for="item in dynamicSlotName"
+        :key="item.prop"
+        #[item.slotName]="scope"
+      >
+        <!-- 绑定row是为了父组件可以通过scope.row拿到所绑定的值 -->
+        <slot :name="item.slotName" :row="scope.row"></slot>
       </template>
     </sx-table>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, ref, watch } from 'vue'
 import { useStore } from '@/store'
 import SxTable from '@/base-ui/SxTable'
-
+import { usePermission } from '@/hooks/usePermission'
 export default defineComponent({
   components: { SxTable },
   props: {
@@ -58,25 +67,68 @@ export default defineComponent({
   },
   setup(props) {
     // 将数据的获取放在这个组件中，目的是为了分层的操作能更灵活
-    // 获取数据
     const store = useStore()
+
+    // 0.获取到每个登录用户的权限信息
+    const isCreate = usePermission(props.PageName, 'create')
+    const isUpdate = usePermission(props.PageName, 'update')
+    const isDelete = usePermission(props.PageName, 'delete')
+    const isQuery = usePermission(props.PageName, 'query')
+
+    // 1.传递分页中的参数 使用v-model进行双向绑定
+    const pageInfo = ref({ currentPage: 0, pageSize: 10 })
+    // 并且使用watch对pageInfo监听
+    watch(pageInfo, () => {
+      getPageData()
+    })
+
+    // 2.获取数据
     const getPageData = (queryInfo: any = {}) => {
-      console.log(queryInfo)
+      if (!isQuery) return
       store.dispatch('systemModule/getPageListAction', {
         pageName: props.PageName,
         queryInfo: {
-          offset: props.offset,
-          size: props.size,
+          // 根据分页中页数和每页需要展示的数量来动态的请求数据
+          offset:
+            (pageInfo.value.currentPage ? pageInfo.value.currentPage - 1 : 0) *
+            pageInfo.value.pageSize,
+          size: pageInfo.value.pageSize,
           ...queryInfo
         }
       })
     }
     getPageData()
-    // 定义table数据
+
+    // 3.定义table数据
     const tableData = computed(() =>
       store.getters['systemModule/pageListData'](props.PageName)
     )
-    return { tableData, getPageData }
+
+    const tableCount = computed(() =>
+      store.getters['systemModule/pageListCount'](props.PageName)
+    )
+
+    // 4.动态获取配置文件中的插槽，以及过滤掉不需要的插槽
+    const dynamicSlotName: any[] = props.contentTableConfig.propList.filter(
+      (item: any) => {
+        if (item.slotName === 'handler') return false
+        if (item.slotName === 'createAt') return false
+        if (item.slotName === 'updateAt') return false
+        if (item.slotName === undefined) return false
+        return true
+      }
+    )
+
+    return {
+      isCreate,
+      isUpdate,
+      isDelete,
+      tableData,
+      tableCount,
+      pageInfo,
+      dynamicSlotName,
+      getPageData
+    }
   }
 })
 </script>

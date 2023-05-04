@@ -12,12 +12,19 @@
       :contentTableConfig="contentTableConfig"
       PageName="users"
       ref="pageContentRef"
-    ></page-content>
+    >
+      <template #status="scope">
+        <!-- 使用scope.row来获取子组件每一行的数据，根据数据来动态决定需要展示什么标签 -->
+        <el-button plain :type="scope.row.enable ? 'success' : 'danger'">
+          {{ scope.row.enable ? '启用' : '禁用' }}
+        </el-button>
+      </template>
+    </page-content>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 
 import PageSearch from '@/components/page-search'
 import PageContent from '@/components/page-content'
@@ -25,6 +32,7 @@ import PageContent from '@/components/page-content'
 import { searchFormConfig } from './config/search.config'
 import { contentTableConfig } from './config/content.config'
 
+import { usePageSearch } from '@/hooks/usePageSearch'
 export default defineComponent({
   name: 'user',
   components: {
@@ -32,13 +40,7 @@ export default defineComponent({
     PageContent
   },
   setup() {
-    const pageContentRef = ref<InstanceType<typeof PageContent>>()
-    const handleQueryClick = (param: any) => {
-      pageContentRef.value?.getPageData(param)
-    }
-    const handleResetClick = () => {
-      console.log(123)
-    }
+    const [pageContentRef, handleResetClick, handleQueryClick] = usePageSearch()
     return {
       pageContentRef,
       searchFormConfig,

@@ -10,7 +10,11 @@ const systemModule: Module<ISystemState, IRootState> = {
     usersList: [],
     usersCount: 0,
     roleList: [],
-    roleCount: 0
+    roleCount: 0,
+    goodsList: [],
+    goodsCount: 0,
+    menuList: [],
+    menuCount: 0
   },
   mutations: {
     changeUsersList(state, usersList) {
@@ -24,12 +28,27 @@ const systemModule: Module<ISystemState, IRootState> = {
     },
     changeRoleCount(state, roleCount) {
       state.roleCount = roleCount
+    },
+    changeGoodsList(state, goodsList) {
+      state.goodsList = goodsList
+    },
+    changeGoodsCount(state, goodsCount) {
+      state.goodsCount = goodsCount
+    },
+    changeMenuList(state, menuList) {
+      state.menuList = menuList
+    },
+    changeMenuCount(state, menuCount) {
+      state.menuCount = menuCount
     }
   },
   // getters 可以算做state的计算属性
   getters: {
     pageListData(state) {
       return (pageName: string) => (state as any)[`${pageName}List`]
+    },
+    pageListCount(state) {
+      return (pageName: string) => (state as any)[`${pageName}Count`]
     }
   },
   actions: {
@@ -40,7 +59,7 @@ const systemModule: Module<ISystemState, IRootState> = {
       const pageUrl = `/${pageName}/list`
       // 请求和拿到数据
       const pageResult = await getPageListData(pageUrl, payload.queryInfo)
-      const { list, totalCount } = pageResult.data
+      const { list, totalCount } = pageResult?.data
       // 动态拼接成Mutation的请求名字
       const MutationsPageName =
         (pageName as string).slice(0, 1).toUpperCase() +

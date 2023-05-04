@@ -8,7 +8,15 @@
         </div>
       </slot>
     </header>
-    <el-table :data="tableData" border style="width: 100%" class="">
+    <el-table
+      :data="tableData"
+      border
+      style="width: 100%"
+      class=""
+      @selection-change="handleSelectionChange"
+      :tree-props="childrenProps.treeProp"
+      :row-key="childrenProps.rowKey"
+    >
       <el-table-column
         v-if="showSelectColumn"
         type="selection"
@@ -23,7 +31,7 @@
         width="80"
       ></el-table-column>
       <template v-for="propItem in propList" :key="propItem.prop">
-        <el-table-column v-bind="propItem" align="center">
+        <el-table-column v-bind="propItem" align="center" show-overflow-tooltip>
           <!-- el-table中可以使用插槽，插槽是默认插槽，也是作用域插槽，可以通过scope拿到相应的值 -->
           <template #default="scope">
             <!-- 在el-table中，scope.row是每一行的数据 -->
@@ -39,13 +47,14 @@
     <div class="footer">
       <slot name="footer">
         <el-pagination
+          v-if="showFooter"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="currentPage4"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
+          :current-page="page.currentPage"
+          :page-sizes="[10, 20, 30, 40]"
+          :page-size="page.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="400"
+          :total="tableCount"
         >
         </el-pagination>
       </slot>
@@ -77,10 +86,39 @@ export default defineComponent({
     showSelectColumn: {
       type: Boolean,
       default: true
+    },
+    tableCount: {
+      type: Number,
+      default: 0
+    },
+    page: {
+      type: Object,
+      default: () => ({ currentPage: 0, pageSize: 10 })
+    },
+    childrenProps: {
+      type: Object,
+      default: () => ({})
+    },
+    showFooter: {
+      type: Boolean,
+      default: true
     }
   },
-  setup() {
-    return {}
+  emits: ['selectionChange', 'update:page'],
+  setup(props, { emit }) {
+    // 监听表格的选择
+    const handleSelectionChange = (value: any) => {
+      emit('selectionChange', value)
+    }
+    // 监听处理当前页数的改变
+    const handleCurrentChange = (currentPage: number) => {
+      emit('update:page', { ...props.page, currentPage })
+    }
+    // 监听当前pageSize的改变
+    const handleSizeChange = (pageSize: number) => {
+      emit('update:page', { ...props.page, pageSize })
+    }
+    return { handleSelectionChange, handleCurrentChange, handleSizeChange }
   }
 })
 </script>

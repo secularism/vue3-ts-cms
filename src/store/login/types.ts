@@ -2,6 +2,7 @@ export interface ILoginState {
   token: string
   userInfo: any
   userMenus: any
+  permission: string[]
 }
 // 定义menu的类型
 // 三级item
