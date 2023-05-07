@@ -1,13 +1,14 @@
 <template>
   <div class="sx-form">
     <header class="header">
-      <slot name="header">高级搜索</slot>
+      <slot name="header" v-if="isShowTitle">高级搜索</slot>
     </header>
     <el-form :label-width="labelWidth">
       <el-row>
         <template v-for="item in formItems" :key="item.label">
           <el-col v-bind="colLayout">
             <el-form-item
+              v-if="!item.isHidden"
               :label="item.label"
               :rules="item.rules"
               :style="itemStyle"
@@ -20,7 +21,7 @@
                   :placeholder="item.placeholder"
                   :show-password="item.type === 'password'"
                   v-bind="item.otherOptions"
-                  v-model="formData[`${item.filed}`]"
+                  v-model="formData[`${item.field}`]"
                 ></el-input>
               </template>
 
@@ -31,7 +32,7 @@
                   :placeholder="item.placeholder"
                   v-bind="item.otherOptions"
                   style="width: 100%"
-                  v-model="formData[`${item.filed}`]"
+                  v-model="formData[`${item.field}`]"
                 >
                   <el-option
                     v-for="option in item.options"
@@ -45,7 +46,7 @@
                 <el-date-picker
                   style="width: 100%"
                   v-bind="item.otherOptions"
-                  v-model="formData[`${item.filed}`]"
+                  v-model="formData[`${item.field}`]"
                 ></el-date-picker>
               </template>
             </el-form-item>
@@ -53,7 +54,7 @@
         </template>
       </el-row>
     </el-form>
-    <footer class="footer">
+    <footer class="footer" v-if="isShowFooter">
       <slot name="footer">
         <el-button>按钮</el-button>
       </slot>
@@ -67,6 +68,14 @@ import { IFormItem } from '../types'
 
 export default defineComponent({
   props: {
+    isShowTitle: {
+      type: Boolean,
+      default: true
+    },
+    isShowFooter: {
+      type: Boolean,
+      default: true
+    },
     modelValue: {
       type: Object,
       required: true

@@ -2,7 +2,7 @@ import { IForm } from '@/base-ui/sxForm/types'
 
 export const searchFormConfig: IForm = {
   labelWidth: '120px',
-  itemLayout: {
+  itemStyle: {
     padding: '10px 40px'
   },
   colLayout: {
@@ -14,25 +14,25 @@ export const searchFormConfig: IForm = {
   },
   formItems: [
     {
-      filed: 'name',
+      field: 'name',
       type: 'input',
       label: '用户名',
       placeholder: '请输入用户名'
     },
     {
-      filed: 'realname',
+      field: 'realname',
       type: 'input',
       label: '真实姓名',
       placeholder: '请输入真实姓名'
     },
     {
-      filed: 'cellphone',
+      field: 'cellphone',
       type: 'input',
       label: '手机号',
       placeholder: '请输入手机号'
     },
     {
-      filed: 'enable',
+      field: 'enable',
       type: 'select',
       label: '用户状态',
       placeholder: '请选择用户状态',
@@ -42,7 +42,7 @@ export const searchFormConfig: IForm = {
       ]
     },
     {
-      filed: 'createAt',
+      field: 'createAt',
       type: 'datepicker',
       label: '创建时间',
       otherOptions: {

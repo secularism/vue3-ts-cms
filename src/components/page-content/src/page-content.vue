@@ -7,7 +7,9 @@
       v-model:page="pageInfo"
     >
       <template #headerHandler>
-        <el-button v-if="isCreate" type="primary">新建用户</el-button>
+        <el-button v-if="isCreate" type="primary" @click="handleAddData"
+          >新建用户</el-button
+        >
       </template>
       <!-- 对status的这个插槽使用button来展示 -->
       <template #createAt="scope">
@@ -18,11 +20,21 @@
         <!-- 全局注册的$filters可以直接使用 -->
         <span>{{ $filters.formatTime(scope.row.updateAt) }}</span>
       </template>
-      <template #handler>
-        <el-button v-if="isUpdate" color="#FFBC42" size="small">
+      <template #handler="scope">
+        <el-button
+          :disabled="!isUpdate"
+          color="#FFBC42"
+          size="small"
+          @click="handleUpdateData(scope.row)"
+        >
           <el-icon><Edit /></el-icon>
         </el-button>
-        <el-button v-if="isDelete" color="#FDD692" size="small">
+        <el-button
+          :disabled="!isDelete"
+          color="#FDD692"
+          size="small"
+          @click="handleDeleteData(scope.row)"
+        >
           <el-icon><Delete /></el-icon>
         </el-button>
       </template>
@@ -65,7 +77,8 @@ export default defineComponent({
       default: 10
     }
   },
-  setup(props) {
+  emits: ['handleUpdateData', 'handleAddData'],
+  setup(props, { emit }) {
     // 将数据的获取放在这个组件中，目的是为了分层的操作能更灵活
     const store = useStore()
 
@@ -119,6 +132,23 @@ export default defineComponent({
       }
     )
 
+    // 监听删除/修改/新建 操作
+    // 删除操作不需要emit给父组件，因为每个组件的删除逻辑一致
+    const handleDeleteData = (item: any) => {
+      store.dispatch('systemModule/deletePageDataAction', {
+        pageName: props.PageName,
+        id: item.id
+      })
+    }
+
+    const handleAddData = () => {
+      emit('handleAddData')
+    }
+
+    const handleUpdateData = (item: any) => {
+      emit('handleUpdateData', item)
+    }
+
     return {
       isCreate,
       isUpdate,
@@ -127,7 +157,10 @@ export default defineComponent({
       tableCount,
       pageInfo,
       dynamicSlotName,
-      getPageData
+      getPageData,
+      handleAddData,
+      handleDeleteData,
+      handleUpdateData
     }
   }
 })
