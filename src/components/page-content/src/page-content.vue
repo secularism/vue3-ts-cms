@@ -89,7 +89,7 @@ export default defineComponent({
     const isQuery = usePermission(props.PageName, 'query')
 
     // 1.传递分页中的参数 使用v-model进行双向绑定
-    const pageInfo = ref({ currentPage: 0, pageSize: 10 })
+    const pageInfo = ref({ currentPage: 1, pageSize: 10 })
     // 并且使用watch对pageInfo监听
     watch(pageInfo, () => {
       getPageData()
@@ -102,9 +102,7 @@ export default defineComponent({
         pageName: props.PageName,
         queryInfo: {
           // 根据分页中页数和每页需要展示的数量来动态的请求数据
-          offset:
-            (pageInfo.value.currentPage ? pageInfo.value.currentPage - 1 : 0) *
-            pageInfo.value.pageSize,
+          offset: (pageInfo.value.currentPage - 1) * pageInfo.value.pageSize,
           size: pageInfo.value.pageSize,
           ...queryInfo
         }

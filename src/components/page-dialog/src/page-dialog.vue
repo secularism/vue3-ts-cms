@@ -10,9 +10,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="centerDialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="centerDialogVisible = false">
-          确定
-        </el-button>
+        <el-button type="primary" @click="confirmClick"> 确定 </el-button>
       </span>
     </template>
   </el-dialog>
@@ -21,6 +19,7 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
 import sxForm from '@/base-ui/sxForm'
+import { useStore } from 'vuex'
 
 export default defineComponent({
   components: {
@@ -34,11 +33,16 @@ export default defineComponent({
     defaultInfo: {
       type: Object,
       default: () => ({})
+    },
+    pageName: {
+      type: String,
+      required: true
     }
   },
   setup(props) {
     const centerDialogVisible = ref(false)
-
+    const store = useStore()
+    // 1.监听数据回显
     const formData = ref<any>({})
     // 监听传过来的defaultInfo，如果有值，则是点击了修改按钮，这时候需要将数据回显
     watch(
@@ -49,7 +53,28 @@ export default defineComponent({
         }
       }
     )
-    return { centerDialogVisible, formData }
+
+    // 2. 处理确定和取消按钮
+    const confirmClick = () => {
+      // 2.1 关闭dialog
+      centerDialogVisible.value = false
+      // 2.2 通过defaultInfo的值来判断是修改操作还是新建操作
+      if (Object.keys(props.defaultInfo).length) {
+        // 修改操作
+        store.dispatch('systemModule/updatePageDataAction', {
+          pageName: props.pageName,
+          id: props.defaultInfo.id,
+          updateInfo: { ...formData.value }
+        })
+      } else {
+        // 添加操作
+        store.dispatch('systemModule/createPageDataAction', {
+          pageName: props.pageName,
+          createInfo: { ...formData.value }
+        })
+      }
+    }
+    return { centerDialogVisible, formData, confirmClick }
   }
 })
 </script>

@@ -26,13 +26,15 @@
     <page-dialog
       ref="pageDialogRef"
       :defaultInfo="defaultInfo"
-      :dialogFormConfig="dialogFormConfig"
+      :dialogFormConfig="dialogFormConfigRef"
+      pageName="users"
     ></page-dialog>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
+import { useStore } from 'vuex'
 
 import PageSearch from '@/components/page-search'
 import PageContent from '@/components/page-content'
@@ -52,6 +54,7 @@ export default defineComponent({
     PageDialog
   },
   setup() {
+    // 1. 处理更新和添加操作的不同
     // 因为修改用户信息时，和添加不同，修改操作不允许修改密码，且不展示密码框，因此这里要做特殊处理
     // 定义两个函数传入到hooks中，根据点击修改/增加的事件不同，对密码一栏进行隐藏或展示
     const updateFn = () => {
@@ -68,6 +71,30 @@ export default defineComponent({
 
       passwordItem!.isHidden = false
     }
+
+    // 2. 动态的为部门和角色表单中的options添加信息
+    // 2.1 获取数据
+    const store = useStore()
+
+    // 2.2 需要用computed包裹起来，因为请求数据的时候 页面已经渲染结束
+    const dialogFormConfigRef = computed(() => {
+      const roleList = store.state.roleList
+      const departmentList = store.state.departmentList
+      const roleItem = dialogFormConfig.formItems.find(
+        (item) => item.field === 'roleId'
+      )
+      const departmentItem = dialogFormConfig.formItems.find(
+        (item) => item.field === 'departmentId'
+      )
+      roleItem!.options = roleList.map((item: any) => {
+        return { title: item.name, value: item.id }
+      })
+      departmentItem!.options = departmentList.map((item: any) => {
+        return { title: item.name, value: item.id }
+      })
+      return dialogFormConfig
+    })
+
     // 获取公共的变量和方法
     const [pageContentRef, handleResetClick, handleQueryClick] = usePageSearch()
     const [pageDialogRef, defaultInfo, handleAddData, handleUpdateData] =
@@ -82,7 +109,8 @@ export default defineComponent({
       pageDialogRef,
       defaultInfo,
       handleAddData,
-      handleUpdateData
+      handleUpdateData,
+      dialogFormConfigRef
     }
   }
 })

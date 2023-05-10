@@ -32,6 +32,20 @@ export const dialogFormConfig: IForm = {
       type: 'password',
       label: '密码',
       placeholder: '请输入密码'
+    },
+    {
+      field: 'roleId',
+      type: 'select',
+      label: '所属角色',
+      placeholder: '请选择所属角色',
+      options: []
+    },
+    {
+      field: 'departmentId',
+      type: 'select',
+      label: '所属部门',
+      placeholder: '请选择所属部门',
+      options: []
     }
   ],
   isShowTitle: false,

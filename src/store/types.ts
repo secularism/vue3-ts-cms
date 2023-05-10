@@ -1,8 +1,8 @@
 import { ILoginState } from './login/types'
 import { ISystemState } from './main/system/types'
 export interface IRootState {
-  name: string
-  age: number
+  roleList: any[]
+  departmentList: any[]
 }
 // 定义组件模块
 export interface IRootWithModule {
